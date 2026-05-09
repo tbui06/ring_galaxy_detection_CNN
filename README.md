@@ -2,29 +2,27 @@
 
 PHYS 310 Final Project — Nam Bui
 
-Ring galaxies form when two galaxies collide head-on, sending a shockwave outward that creates a bright ring of new stars. They're rare, visually striking, and hard to find manually at scale. This project trains a CNN to score galaxy images by ring probability, then applies it to images from the Euclid space telescope to surface the most likely candidates.
-
-The full write-up is in `report/310_final_report.pdf`.
+Ring galaxies are rare galaxies that have a bright center, like many other galaxies, but they have a bright ring of stars circling them far from the center. They likely form when one galaxy collides directly with another, sending a wave outward that creates a ring of new stars. Studying them helps us understand how galaxies interact and change over time. In the past, galaxy shapes were classified manually by people looking at images. The Galaxy Zoo project used many volunteers to label galaxies. These labels are values between 0 and 1, derived from how many people voted yes or no to the image. The Euclid space telescope is a recent mission that will image billions of galaxies. Their images are high quality, but the image dataset is huge to check manually. In this project, a convolutional neural network (CNN) is trained on Galaxy Zoo data to predict ring galaxy probability. The model is then applied to Euclid images, where it predicts high-probability ring galaxies.
 
 ---
 
 ## What I did
 
-I fine-tuned a pretrained ResNet50 on ~20,000 labeled images from the Galaxy Zoo `gz_rings` dataset, where labels are crowd-sourced ring probability scores between 0 and 1. The model outputs a single probability per image.
+I took a pretrained ResNet50 and fine-tuned it on ~20,000 Galaxy Zoo images, each labeled with a ring probability voted on by volunteers. The model learns to output a single score per image.                                         
 
-One key thing I learned early: using simple [0,1] normalization caused the model to predict a constant value. ResNet50 was pretrained with ImageNet-specific channel normalization, so using the wrong preprocessing completely broke learning. Fixing that (and unfreezing the last 30 layers of ResNet50 so batch norm could adapt) made the model actually train.
+The trickiest bug early on: the model kept predicting the same value for every image. Turned out I was normalizing images to [0,1], but ResNet50 expects a specific ImageNet normalization — using the wrong one completely broke learning. I also had to unfreeze the last 30 layers so the model could actually adapt to galaxy images instead of staying stuck on ImageNet features.
 
-The trained model was then run on 2,378 Euclid telescope images, which have no labels, to rank them by predicted ring probability.
+Once trained, I ran it on 2,378 Euclid telescope images (no labels) to rank them by predicted ring probability.
 
 ---
 
 ## Results
 
-- Test MAE of **0.156** on held-out Galaxy Zoo images
+- Test MAE of **0.156** on the validation set of Galaxy Zoo images
 - **1,044 out of 2,378** Euclid galaxies scored above 0.5
-- Most top-ranked images visually show ring-like structures — a few false positives appear (edge-on galaxies, spirals), which is expected since the model was trained on SDSS images and Euclid images look noticeably different
+- Most top-ranked images visually show ring-like structures with a few false positives (edge-on galaxies, spirals), which is expected since the model was trained on SDSS images, and Euclid images look noticeably different
 
-Mild overfitting appeared after epoch 6 — validation loss plateaued while training loss kept dropping. Early stopping would fix this in a future run.
+Mild overfitting appeared after epoch 6, where validation loss plateaued while training loss kept dropping. Early stopping would fix this in a future run.
 
 ---
 
@@ -32,7 +30,6 @@ Mild overfitting appeared after epoch 6 — validation loss plateaued while trai
 
 ```
 python_script/ring_galaxy_project.ipynb   — full code
-trained_model/ring_galaxy_model.keras     — saved model
 report/310_final_report.pdf               — full report
 images/                                   — result plots
 ```
