@@ -1,8 +1,5 @@
 # Ring Galaxy Detection in Euclid Images Using Convolutional Neural Network and ResNet50
 
-
-PHYS 310 Final Project — Nam Bui
-
 Ring galaxies are rare galaxies that have a bright center, like many other galaxies, but they have a bright ring of stars circling them far from the center. They likely form when one galaxy collides directly with another, sending a wave outward that creates a ring of new stars. Studying them helps us understand how galaxies interact and change over time. In the past, galaxy shapes were classified manually by people looking at images. The Galaxy Zoo project used many volunteers to label galaxies. These labels are values between 0 and 1, derived from how many people voted yes or no to the image. The Euclid space telescope is a recent mission that will image billions of galaxies. Their images are high quality, but the image dataset is huge to check manually. In this project, a convolutional neural network (CNN) is trained on Galaxy Zoo data to predict ring galaxy probability. The model is then applied to Euclid images, where it predicts high-probability ring galaxies.
 
 ---
