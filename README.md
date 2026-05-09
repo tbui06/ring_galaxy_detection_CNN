@@ -1,4 +1,5 @@
-# Ring Galaxy Detection in Euclid Images
+# Ring Galaxy Detection in Euclid Images Using Convolutional Neural Network and ResNet50
+
 
 PHYS 310 Final Project — Nam Bui
 
